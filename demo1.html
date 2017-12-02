@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>猜数字游戏1</title>
+    <style>
+    	*{padding: 0;margin: 0;}
+    	#game{width: 800px;margin: 50px auto 0;}
+    	#game h1{line-height: 62px;}
+    	#game p{line-height: 40px;}
+    	.form{}
+    	 #txt{line-height: 18px;height: 18px;}
+    	 #btn{width: 34px;height: 22px;line-height: 22px;cursor: pointer;}
+    	.bottom .p2{color: #fff;} 	
+    </style>
+    
+  </head>
+
+<body>
+	<div id="game">
+	<h1>猜数字游戏</h1>
+	<p>选择1-100之间的随机数。看你能都在10次猜出随机值。</p>
+	<div class="form">
+		<label>输入你所猜测的数值：</label>
+		<input type="text" id="txt" />
+		<input type="button" id="btn" value="提交" />
+	</div>
+	<div class="bottom">
+		<p class="p1"></p>
+		<p class="p2"></p>
+		<p class="p3"></p>
+	</div>
+</div>
+
+<script>
+			var oGame=document.getElementById('game');
+    	var oTxt=document.getElementById('txt');
+    	var oBtn=document.getElementById('btn');
+    	var oP1=document.querySelector('.p1');
+    	var oP2=document.querySelector('.p2');
+    	var oP3=document.querySelector('.p3');
+    	
+    	var oRandom=Math.floor(Math.random()*100)+1;
+    	var guessCount=1;
+    	var resetButton;
+    	
+    	oBtn.addEventListener('click',checkGuess);   //点击事件 函数名：checkGuess
+    	function checkGuess(){
+    		var userGuess=Number(oTxt.value);
+    		
+    		if(guessCount===1){
+    			oP1.textContent='当前猜的数字：';
+    		}
+    			oP1.textContent+=userGuess+' '; 	
+    	
+    		if(userGuess===oRandom){
+    			oP2.textContent='恭喜你猜对了';
+    			oP2.style.background='green';
+    			oP3.textContent='';
+    			setGameOver();
+    	}else if(guessCount===10){
+    			oP2.textContent='10次机会已用完！游戏结束！'	
+    			setGameOver();
+    	}else{
+    			oP2.textContent='错误！！';
+    			oP2.style.background='red';
+    			if(userGuess<oRandom){
+    					oP3.textContent='你猜的数字低了';
+    			}else if(userGuess>oRandom){
+    					oP3.textContent='你猜的数字高了';
+    			}
+		  	}
+    			guessCount++;
+    			oTxt.value='';
+    			oTxt.focus();
+    	}
+    	
+    	function setGameOver(){
+    			oTxt.disabled=true;
+    			oBtn.disabled=true;
+    			resetButton=document.createElement('button');
+    			resetButton.textContent='新一轮游戏开始';
+    			oGame.appendChild(resetButton);
+    			resetButton.addEventListener('click',resetGame);  //重置游戏
+    	}
+    	
+    	function resetGame(){
+    		guessCount=1;
+    		var oP=document.querySelectorAll('.bottom p');
+    		for(var i=0;i<oP.length;i++){
+    			oP[i].textContent='';
+    		}
+    			resetButton.parentNode.removeChild(resetButton);
+    			
+    			oTxt.disabled=false;
+    			oBtn.disabled=false;
+    			oTxt.value='';
+    			oTxt.focus();
+    			
+    			oP2.style.background='white';
+    			oRandom=Math.floor(Math.random()*100)+1;
+    	}
+    	
+    	 	
+    </script>
+</body>
+</html>
